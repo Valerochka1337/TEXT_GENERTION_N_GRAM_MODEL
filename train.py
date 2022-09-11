@@ -3,7 +3,7 @@ import pickle
 import os
 
 
-def fit(seed=2, data_dir='data'):
+def fit(seed=2, data_dir='data', model=''):
     text = ''
     # обьединяем все файлы в один большой текст
     for filename in os.listdir(data_dir):
@@ -36,5 +36,5 @@ def fit(seed=2, data_dir='data'):
             probs.append([i, n_word[pref][1][i] / n_word[pref][0]])
         n_word[pref] = probs
 
-    with open('models/data.pickle', 'wb') as f:
+    with open('models/'+model+'.pickle', 'wb') as f:
         pickle.dump(n_word, f)

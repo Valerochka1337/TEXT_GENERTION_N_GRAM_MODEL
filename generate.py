@@ -1,21 +1,24 @@
 import pickle
-from random import choice
 from numpy import random
 
 
 def load_model(model_dir):
-    with open('models/' + model_dir, 'rb') as f:
+    with open('models/' + model_dir + '.pickle', 'rb') as f:
         n_word = pickle.load(f)
     return n_word
 
 
-def generate(prefix='', length=10, n_word=None, seed=2):
+def generate(prefix='', length=10, n_word=None, ran_seed=23):
+    # инициализируем сид
+    random.seed(ran_seed)
     if n_word is None:
         n_word = {}
+    # определяем длин н-грамм
+    seed = len(list(n_word.keys())[0])
     text_ans = []
     # если пользователь не ввел начальные слова, то выбираем рандомно из n-грамм
     if prefix == '':
-        for i in choice(list(n_word.keys())):
+        for i in list(n_word.keys())[int(random.choice(len(list(n_word.keys()))))]:
             text_ans.append(i)
     # иначе разделяем введенные слова
     else:
