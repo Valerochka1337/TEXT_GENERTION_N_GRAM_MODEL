@@ -11,9 +11,7 @@ def load_model(model_dir):
 def generate(prefix='', length=10, n_word=None, ran_seed=23):
     # инициализируем сид
     random.seed(ran_seed)
-    if n_word is None:
-        n_word = {}
-    # определяем длин н-грамм
+    # определяем длину н-грамм
     seed = len(list(n_word.keys())[0])
     text_ans = []
     # если пользователь не ввел начальные слова, то выбираем рандомно из n-грамм
@@ -26,11 +24,12 @@ def generate(prefix='', length=10, n_word=None, ran_seed=23):
             text_ans.append(w.lower())
     for i in range(length):
         try:
+            # список возможных последующих слов
+            next_words = n_word[tuple(text_ans[i:i + seed])]
             # тут, выбираем рандомно слово из возможных для данной n-граммы
-            # учитываем вероятность каждого с помощью np.random.choice
-            text_ans.append(n_word[tuple(text_ans[i:i + seed])][
-                                int(random.choice(len(n_word[tuple(text_ans[i:i + seed])]), 1, p=list(
-                                    map(lambda x: x[1], n_word[tuple(text_ans[i:i + seed])]))))][0])
+            # учитываем вероятность каждого с помощью параметра p в np.random.choice
+            text_ans.append(next_words[int(random.choice(len(next_words), 1,
+                                                         p=list(map(lambda x: x[1], next_words))))][0])
         # если нет последующих слов, то завершаем с тем, что есть
         except Exception:
             print('not ehougth words')

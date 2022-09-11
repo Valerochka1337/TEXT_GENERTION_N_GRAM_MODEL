@@ -8,12 +8,14 @@ class NGramModel():
     model_dir = ''
     n_word = {}
 
+    def load_model(self, model_dir):
+        self.model_dir = model_dir
+        self.n_word = generate.load_model(model_dir)
+
     def fit(self, texts_dir='', seed=2, model=''):
         train.fit(seed, texts_dir, model)
 
-    def generate(self, prefix, model_dir, length=20, ran_seed=23):
-        self.model_dir = model_dir
-        self.n_word = generate.load_model(model_dir)
+    def generate(self, prefix, length=20, ran_seed=23):
         generate.generate(prefix, length, self.n_word, ran_seed)
         return self
 
@@ -36,9 +38,10 @@ if __name__ == '__main__':
 
         elif inp == 'generate':
             model_path = input('------Enter model name:')
+            model.n_word = generate.load_model(model_path)
             ran_seed = int(input('------Enter random seed:'))
-            pref = input('------Enter start words (leave blank to use randomly generated):')
+            pref = input(f'------Enter start words {len(list(model.n_word.keys())[0])} (leave blank to use randomly generated):')
             length = int(input('------Enter length of the generated text:'))
-            model.generate(pref, model_path, length, ran_seed)
+            model.generate(pref, length, ran_seed)
         else:
             print('----------------------------------------')
