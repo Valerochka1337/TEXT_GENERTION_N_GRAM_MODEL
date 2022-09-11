@@ -16,18 +16,19 @@ def fit(seed=2, data_dir='data', model=''):
     n_word = {}
 
     for i in range(len(text) - seed):
+        next_words = n_word[tuple(text[i:i + seed])]
         # если n-грамы нет в словаре, добавляем её
         if not n_word.__contains__(tuple(text[i:i + seed])):
-            n_word[tuple(text[i:i + seed])] = [1, {text[i + seed]: 1}]
+            next_words = [1, {text[i + seed]: 1}]
         else:
             # иначе добавляем, если следующего слова нет в словаре,
             # добавляем в словарь и увеличиваем количество всех слов
             if text[i + seed] in n_word[tuple(text[i:i + seed])][1]:
-                n_word[tuple(text[i:i + seed])][1][text[i + seed]] += 1
+                next_words[1][text[i + seed]] += 1
             else:
                 # если след словов есть, то увеличиваем количество этих слов и кол-во общих слов
-                n_word[tuple(text[i:i + seed])][1][text[i + seed]] = 1
-            n_word[tuple(text[i:i + seed])][0] += 1
+                next_words[1][text[i + seed]] = 1
+            next_words[0] += 1
 
     for pref in n_word.keys():
         probs = []
